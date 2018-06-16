@@ -25,7 +25,39 @@ public class MoveEnemy : MonoBehaviour {
     float ScreenMargin = 2;
     float SpawnContactMargin = 1;
 
+    Color ColorCache1 = Color.Black;
+    Color ColorCache2 = Color.White;
 
+    Color ColorSet()
+    {
+        if (ColorCache1 == ColorCache2) {
+            if (ColorCache1 == Color.White)
+            {
+                ColorCache2 = ColorCache1;
+                ColorCache1 = Color.Black;
+                return Color.Black;
+            }
+            else {
+                ColorCache2 = ColorCache1;
+                ColorCache1 = Color.White;
+                return Color.White;
+            }
+        }
+        switch (Random.Range(0, 2))
+        {
+            case 0:
+                ColorCache2 = ColorCache1;
+                ColorCache1 = Color.White;
+                return Color.White;
+            case 1:
+                ColorCache2 = ColorCache1;
+                ColorCache1 = Color.Black;
+                return Color.Black;
+            default:
+                return Color.White;//Meaningless
+        }
+        
+    }
     void SpwanEnemy(Enemy enemy)
     {
         Vector2 SpawnPosition = Vector2.zero;
@@ -60,6 +92,8 @@ public class MoveEnemy : MonoBehaviour {
             enemy.Direction = new Vector3(-vec.x,-vec.y,0);
             angle = (Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) - 180;
 
+
+            //Adjust the distance between arrows
             for (int i = 0; i < EnemyNumber; i++)
             {
                 if (Enemys[i].Obj != null)
@@ -72,12 +106,19 @@ public class MoveEnemy : MonoBehaviour {
         if (enemy.Obj == null)
         {
             enemy.Obj = Instantiate(PrefabEnemy, SpawnPosition, Quaternion.Euler(0.0f, 0.0f, angle)) as GameObject;
+            enemy.SpriteR = enemy.Obj.GetComponent<SpriteRenderer>();
         }
         else
         {
             enemy.Obj.transform.position = new Vector3(SpawnPosition.x, SpawnPosition.y, 0);
             enemy.Obj.transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
         }
+        //Color Setting
+        enemy.color = ColorSet();
+        if (enemy.color == Color.White)
+            enemy.SpriteR.sprite = WhiteEnemy;
+        else
+            enemy.SpriteR.sprite = BlackEnemy;
     }
     void Start() {
         Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
@@ -158,11 +199,14 @@ public class MoveEnemy : MonoBehaviour {
             }
         }
     }
+    enum Color { White,Black };
 
     class Enemy {
         public GameObject Obj;
         public Vector3 Direction;
         public bool IsRunning;
+        public Color color;
+        public SpriteRenderer SpriteR;
         public Enemy(){
         }
     }
