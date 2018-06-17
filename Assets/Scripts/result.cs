@@ -15,9 +15,10 @@ public class result : MonoBehaviour {
     private float alfa;
     private float speed = 0.035f;
 
-    private float count = 1;
+    private float count = 20;
     private bool PanelFlag = false;
     private float PosX, PosY, PosZ;
+    private float Value;
 
 	// Use this for initialization
 	void Start () {
@@ -27,12 +28,33 @@ public class result : MonoBehaviour {
         PosX = Panel.transform.position.x;
         PosY = Panel.transform.position.y;
         PosZ = Panel.transform.position.z;
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
         Flash();
 
+        if (Input.GetKey(KeyCode.I))
+        {
+            PanelFlag = true;
+        }
+        if(PanelFlag == true)
+        { 
+
+            // リザルトパネルが下に降りる処理
+            
+            if (PanelFlag == true)
+            {
+                PosY = PosY - count;
+                Panel.transform.position = new Vector3(PosX, PosY, PosZ);
+                Debug.Log(PosY);
+                if (PosY < 100)
+                {
+                    PanelFlag = false;
+                }
+            }
+        }
         // ゲームに戻る処理
         if (Input.GetMouseButton(0))
         {
@@ -66,9 +88,10 @@ public class result : MonoBehaviour {
         PanelFlag = true;
         if (PanelFlag == true)
         {
-            Panel.transform.position = new Vector3(PosX, PosY - count, PosZ);
             PosY = PosY - count;
-            if (PosY < 1)
+            Panel.transform.position = new Vector3(PosX, PosY, PosZ);
+            Debug.Log(PosY);
+            if (PosY < 100)
             {
                 PanelFlag = false;
             }
