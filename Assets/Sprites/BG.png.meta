@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e426c3ff798a1dd429249d58caa67972
+guid: 2567c0da4499aaf4190715a826e691cc
 TextureImporter:
   fileIDToRecycleName:
     21300000: BG_0
@@ -110,7 +110,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2f3f1ec4a883ef14aaf3ea3084c86f6c
+      spriteID: f2c9866a5395e2a499ef55375d3d127a
       vertices: []
       indices: 
       edges: []
@@ -130,7 +130,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d1f53009842f9946aa84d10b7aa57c9
+      spriteID: 52735bc255ad5be4287505ce85891d3a
       vertices: []
       indices: 
       edges: []
@@ -139,10 +139,10 @@ TextureImporter:
       name: BG_2
       rect:
         serializedVersion: 2
-        x: 722
-        y: 463
-        width: 346
-        height: 70
+        x: 723
+        y: 466
+        width: 344
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -150,7 +150,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d574c3c001ef1c94495af6fc20461b73
+      spriteID: abcca295510d1834bbe5d26dbd360639
       vertices: []
       indices: 
       edges: []
@@ -158,7 +158,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: f8d50df8eddff9246a10133ec1b6c635
+    spriteID: 62e4c9849b770cb4fb8b8e2e5fbea363
     vertices: []
     indices: 
     edges: []

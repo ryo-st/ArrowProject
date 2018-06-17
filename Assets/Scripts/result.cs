@@ -2,34 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor.SceneManagement;
 
 // リザルトのパネルの処理
 
 public class result : MonoBehaviour {
 
     GameObject Panel;
-    GameObject Ranking;
     GameObject Restart;
 
     private bool FlashFlag = true;
     private float alfa;
     private float speed = 0.035f;
 
-    int RankUpdate = -1;            // ランク
-    public static int[] PastScore = new int[5];// スコア退避用変数
-    int MAxRanking = 5;// ランキングの最大数
+    private float count = 1;
+    private bool PanelFlag = false;
+    private float PosX, PosY, PosZ;
 
 	// Use this for initialization
 	void Start () {
         Panel = GameObject.Find("Panel");
-        Ranking = GameObject.Find("ランキング");
         Restart = GameObject.Find("ReStart");
-	}
+
+        PosX = Panel.transform.position.x;
+        PosY = Panel.transform.position.y;
+        PosZ = Panel.transform.position.z;
+    }
 	
 	// Update is called once per frame
 	void Update () {
         Flash();
+
+        // ゲームに戻る処理
+        if (Input.GetMouseButton(0))
+        {
+            EditorSceneManager.LoadScene("Main2");
+        }
     }
+
+    // ReStartの点滅処理
     private void Flash()
     {
         if (FlashFlag == true)
@@ -46,5 +57,21 @@ public class result : MonoBehaviour {
             FlashFlag = !FlashFlag;
         }
         Restart.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, alfa);
+    }
+
+    // リザルト画面が呼び出される
+    public void Result()
+    {
+        // リザルトパネルが下に降りる処理
+        PanelFlag = true;
+        if (PanelFlag == true)
+        {
+            Panel.transform.position = new Vector3(PosX, PosY - count, PosZ);
+            PosY = PosY - count;
+            if (PosY < 1)
+            {
+                PanelFlag = false;
+            }
+        }
     }
 }

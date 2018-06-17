@@ -7,6 +7,7 @@ public class title : MonoBehaviour {
 
     GameObject Touch;
     GameObject Fadefnc;
+
     private bool FlashFlag = true;
     private bool CountFalg = false;
     private float alfa;
@@ -30,12 +31,11 @@ public class title : MonoBehaviour {
         if (CountFalg == true)
         {
             count += 0.1f;
-            Debug.Log(count);
             fade d2 = Fadefnc.GetComponent<fade>();
             d2.FadeIn();
             if (count > 5f)
             {
-                EditorSceneManager.LoadScene("Main");
+                EditorSceneManager.LoadScene("Main2");
                 CountFalg = false;
             }
         }
