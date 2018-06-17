@@ -8,8 +8,7 @@ public class MovePlayer : MonoBehaviour {
 
     private Vector3 playerPos;
     private Vector3 mousePos;
-    [SerializeField]
-    private float PlayerSpeed = 0.5f;
+    private float PlayerSpeed = 10f;
 
     public class Player
     {
@@ -22,12 +21,18 @@ public class MovePlayer : MonoBehaviour {
         public void InitialIsContact() { ProgressPlayerCheck.IsContact = false; }
     }
 
-
+    float VerticalLength;
+    float HorizontallLength;
     public Player player;
     private void Start()
     {
         player = new Player();
         thisBody = this.GetComponent<Rigidbody2D>();
+
+        Vector2 TopLeft = Camera.main.ViewportToWorldPoint(new Vector2(0, 1));
+        Vector2 BottomRight = Camera.main.ViewportToWorldPoint(new Vector2(1, 0));
+        VerticalLength = Mathf.Abs(TopLeft.y) + Mathf.Abs(BottomRight.y);
+        HorizontallLength = Mathf.Abs(TopLeft.x) + Mathf.Abs(BottomRight.x);
     }
     void Update()
     {
@@ -35,30 +40,38 @@ public class MovePlayer : MonoBehaviour {
         {
             playerPos = this.transform.position;
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (Input.touchSupported)
+            {
+                mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            }
+
         }
     }
     Rigidbody2D thisBody;
     private void FixedUpdate()
     {
         PlayerControl();
-
     }
+
     private void PlayerControl()
     {
-
         if (Input.GetMouseButton(0))
         {
-            Vector3 NowPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - mousePos;
+            Vector3 NowPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             // タッチ入力をサポートしてるかどうからしい
             if (Input.touchSupported)
             {
-                NowPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position) - mousePos;
+                NowPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             }
 
             playerPos.z = mousePos.z = NowPos.z = 0.0f;
-            Vector3 diff = NowPos - mousePos;      
+            Vector3 diff = NowPos - mousePos;
+            diff.x /= HorizontallLength;
+            diff.y /= VerticalLength;
 
+
+            
             thisBody.velocity = diff * PlayerSpeed;
             /*
             if (0 < dist && dist < 7)

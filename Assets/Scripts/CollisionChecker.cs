@@ -5,8 +5,9 @@ using UnityEngine;
 public class CollisionChecker : MonoBehaviour {
 
     public bool IsContact = false;
-	void OnTriggerEnter2D(Collider2D other) {
-        if (other.tag == "Player") IsContact = true;
-	}
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Player") IsContact = true;
+    }
 
 }

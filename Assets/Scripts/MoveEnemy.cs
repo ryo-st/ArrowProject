@@ -127,8 +127,8 @@ public class MoveEnemy : MonoBehaviour {
 
        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
    
-        WhiteEnemy = Characters[1];
-        BlackEnemy = Characters[2];
+        WhiteEnemy = Characters[2];
+        BlackEnemy = Characters[3];
 
         Camera camera = Camera.main;
         Vector2 TopLeft = Camera.main.ViewportToWorldPoint(new Vector2(0, 1));
