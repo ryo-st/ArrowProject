@@ -7,11 +7,17 @@ using UnityEngine.UI;
 
 public class result : MonoBehaviour {
 
+    GameObject Panel;
     GameObject Ranking;
     GameObject Restart;
 
+    int RankUpdate = -1;            // ランク
+    public static int[] PastScore = new int[5];// スコア退避用変数
+    int MAxRanking = 5;// ランキングの最大数
+
 	// Use this for initialization
 	void Start () {
+        Panel = GameObject.Find("Panel");
         Ranking = GameObject.Find("ランキング");
         Restart = GameObject.Find("Restart");
 	}
