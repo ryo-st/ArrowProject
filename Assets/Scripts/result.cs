@@ -8,27 +8,45 @@ using UnityEngine.UI;
 public class result : MonoBehaviour {
 
     GameObject Panel;
-    GameObject Ranking;
     GameObject Restart;
 
     private bool FlashFlag = true;
     private float alfa;
     private float speed = 0.035f;
 
-    int RankUpdate = -1;            // ランク
-    public static int[] PastScore = new int[5];// スコア退避用変数
-    int MAxRanking = 5;// ランキングの最大数
+    private float count = 30;
+    private bool PanelFlag = false;
+    private float PosX, PosY, PosZ;
 
 	// Use this for initialization
 	void Start () {
         Panel = GameObject.Find("Panel");
-        Ranking = GameObject.Find("ランキング");
         Restart = GameObject.Find("ReStart");
-	}
+
+        PosX = Panel.transform.position.x;
+        PosY = Panel.transform.position.y;
+        PosZ = Panel.transform.position.z;
+    }
 	
 	// Update is called once per frame
 	void Update () {
         Flash();
+
+       // D押したらパネルが下に降りる
+        if (Input.GetKey(KeyCode.D))
+        {
+            PanelFlag = true;
+        }
+        // リザルトパネルが下に降りる処理
+        if (PanelFlag == true)
+        {
+            Panel.transform.position = new Vector3(PosX, PosY - count, PosZ);
+            PosY = PosY - count;
+            if (PosY < 140)
+            {
+                PanelFlag = false;
+            }
+        }
     }
     private void Flash()
     {

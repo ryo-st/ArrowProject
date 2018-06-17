@@ -137,10 +137,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 181609846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dc0c0b374f5c864cae27b069a83ca75, type: 3}
+  m_Script: {fileID: 11500000, guid: 7768811bfa7ae8f449aebc0c0f85c232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrefabEnemy: {fileID: 1460384206118272, guid: 7dbc47c07282035449ed40f48beeeac1,
+  PrefabEnemy: {fileID: 1460384206118272, guid: f64b0a0f62a55e84cbb595d1e92faa87,
     type: 2}
   InitialRunnningNumber: 3
   EnemySpeed: 0.1
@@ -443,7 +443,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 697188884}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4451b67a5042df049b4f65f7b81df5cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a7105daf70dfed49b8e58e7e6a6dbbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &697188890
@@ -705,7 +705,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: e426c3ff798a1dd429249d58caa67972, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2567c0da4499aaf4190715a826e691cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1087,7 +1087,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1739069489}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52da419dacb0e0f4cb329bc99c80a46a, type: 3}
+  m_Script: {fileID: 11500000, guid: 427575dd386a530468088189f871a95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &1739069491
@@ -1125,7 +1125,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e826a9bcfc3279047bcbe3ab4dfcc77d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4b3ab4f6bb1ab948a672fca7039203c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1157,7 +1157,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1279,12 +1279,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300002, guid: 74ceaa7f3d2582c488cdf25cf8261998, type: 3}
+  m_Sprite: {fileID: 21300002, guid: 98a5d168cbabc5743a199cb1cf9b804d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.54, y: 0.76}
+  m_Size: {x: 2.61, y: 0.82}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1346,7 +1346,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 74ceaa7f3d2582c488cdf25cf8261998, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 98a5d168cbabc5743a199cb1cf9b804d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
