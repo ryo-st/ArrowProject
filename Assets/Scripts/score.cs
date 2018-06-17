@@ -5,13 +5,21 @@ using UnityEngine.UI;
 
 public class score : MonoBehaviour {
 
-    GameObject NowScre;
-    public int ScoreCount;
+    Text NowScore;
+    public Text FinalScore;
+    int ScoreCount=0;
 
+    public void SetScore(int p_socre)
+    {
+        ScoreCount = p_socre;
+        //NowScore.text = ScoreCount.ToString("D4");
+        NowScore.text = ScoreCount.ToString();
+        FinalScore.text = ScoreCount.ToString();
+    }
     // Use this for initialization
     void Start () {
-        NowScre = GameObject.Find("Score");
-        NowScre.GetComponent<Text>().text = ScoreCount.ToString("D4");
+        NowScore = this.GetComponent<Text>();
+        NowScore.text = ScoreCount.ToString();
     }
 	
 	// Update is called once per frame
@@ -19,7 +27,7 @@ public class score : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Y))
         {
             ScoreCount += 10;
-            NowScre.GetComponent<Text>().text = ScoreCount.ToString("D4");
+            NowScore.text = ScoreCount.ToString();
         }
 	}
 }

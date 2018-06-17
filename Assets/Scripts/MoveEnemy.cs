@@ -14,8 +14,8 @@ public class MoveEnemy : MonoBehaviour {
     Vector2 LeftStartPoint, BottomStartPoint;
     Vector2 LeftEndPoint, BottomEndPoint;
 
-    Vector2 RightStartPoint, TopStartPoint;
-    Vector2 RightEndPoint, TopEndPoint;
+    public static Vector2 RightStartPoint, TopStartPoint;
+    public static Vector2 RightEndPoint, TopEndPoint;
 
     Vector2 TopRightPoint;
 
@@ -25,36 +25,36 @@ public class MoveEnemy : MonoBehaviour {
     float ScreenMargin = 2;
     float SpawnContactMargin = 1;
 
-    Color ColorCache1 = Color.Black;
-    Color ColorCache2 = Color.White;
+    Colors ColorCache1 = Colors.Black;
+    Colors ColorCache2 = Colors.White;
 
-    Color ColorSet()
+    Colors ColorSet()
     {
         if (ColorCache1 == ColorCache2) {
-            if (ColorCache1 == Color.White)
+            if (ColorCache1 == Colors.White)
             {
                 ColorCache2 = ColorCache1;
-                ColorCache1 = Color.Black;
-                return Color.Black;
+                ColorCache1 = Colors.Black;
+                return Colors.Black;
             }
             else {
                 ColorCache2 = ColorCache1;
-                ColorCache1 = Color.White;
-                return Color.White;
+                ColorCache1 = Colors.White;
+                return Colors.White;
             }
         }
         switch (Random.Range(0, 2))
         {
             case 0:
                 ColorCache2 = ColorCache1;
-                ColorCache1 = Color.White;
-                return Color.White;
+                ColorCache1 = Colors.White;
+                return Colors.White;
             case 1:
                 ColorCache2 = ColorCache1;
-                ColorCache1 = Color.Black;
-                return Color.Black;
+                ColorCache1 = Colors.Black;
+                return Colors.Black;
             default:
-                return Color.White;//Meaningless
+                return Colors.White;//Meaningless
         }
         
     }
@@ -115,15 +115,16 @@ public class MoveEnemy : MonoBehaviour {
         }
         //Color Setting
         enemy.color = ColorSet();
-        if (enemy.color == Color.White)
+        if (enemy.color == Colors.White)
             enemy.SetImage(WhiteEnemy);
         else
             enemy.SetImage(BlackEnemy);
     }
+    private void Awake()
+    {
+        GameEnd = false;
+    }
     void Start() {
-        ////Dummy
-        dummyPlayer = new Player();
-       ////Dummy
 
        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
    
@@ -166,9 +167,9 @@ public class MoveEnemy : MonoBehaviour {
             Enemys[i].IsRunning = true;
         }
     }
-    public int InitialRunnningNumber=3;
-    public float EnemySpeed=0.1f;
-    public int SpwanRatio = 30;
+    int InitialRunnningNumber=3;
+    float EnemySpeed=0.1f;
+    int SpwanRatio = 30;
     void FixedUpdate() {
         int RunningEnemyNumber = 0;
         Vector3 ep;//EnemyPosition
@@ -194,7 +195,7 @@ public class MoveEnemy : MonoBehaviour {
         {
             if (Enemys[i].IsRunning) RunningEnemyNumber++;
         }
-        if (RunningEnemyNumber < SimultaneousEnemyNumber && Random.Range(0,100) < SpwanRatio)
+        if (!GameEnd && RunningEnemyNumber < SimultaneousEnemyNumber && Random.Range(0,100) < SpwanRatio)
         {
             for (int i = 0; i < EnemyNumber; i++)
             {
@@ -202,7 +203,8 @@ public class MoveEnemy : MonoBehaviour {
             }
         }
     }
-
+    public result resultS;
+    public score scoreS;
     void Update()
     {
 
@@ -210,18 +212,20 @@ public class MoveEnemy : MonoBehaviour {
         {
             if (Enemys[i].IsRunning)
             {
-                switch (Enemys[i].IsContact(dummyPlayer))
+                switch (Enemys[i].IsContact(MovePlayerS.player))
                 {
                     case PlayerCollisionState.Break:
                         GameEnd = true;
-                        Time.timeScale = 0f;
+                        //Time.timeScale = 0f;
+                        MovePlayerS.player.Die();
+                        resultS.Result();
                         break;
                     case PlayerCollisionState.Absorption:
                         Enemys[i].IsRunning = false;
                         SpwanEnemy(Enemys[i]);
                         //Effect
                         Score++;
-                        Debug.Log(Score);
+                        scoreS.SetScore(Score);
                         break;
                     case PlayerCollisionState.none:
                         break;
@@ -229,24 +233,19 @@ public class MoveEnemy : MonoBehaviour {
             }
         }
     }
-    public bool GameEnd = false;
+    public static bool GameEnd = false;
     public int Score = 0;
 
-    public Player dummyPlayer;
-    public class Player
-    {
-        public Color color;
-        public Player() { color = Color.White; }
-    }
+    public MovePlayer MovePlayerS;
 
-    public enum Color { White,Black };
+    public enum Colors { White,Black };
 
     enum PlayerCollisionState { none, Break, Absorption }
     class Enemy {
         private GameObject Obj;
         public Vector3 Direction;
         public bool IsRunning;
-        public Color color;
+        public Colors color;
         private SpriteRenderer SpriteR;
         private CollisionChecker CollisionCheck;
         public Enemy(){ }
@@ -261,12 +260,12 @@ public class MoveEnemy : MonoBehaviour {
         {
             SpriteR.sprite = image;
         }
-        public PlayerCollisionState IsContact(Player p_Player)
+        public PlayerCollisionState IsContact(MovePlayer.Player p_Player)
         {
             if (CollisionCheck.IsContact)
             {
                 CollisionCheck.IsContact = false;
-                if (p_Player.color == this.color)
+                if (p_Player.GetColors() == this.color)
                 {
                     return PlayerCollisionState.Absorption;
                 }

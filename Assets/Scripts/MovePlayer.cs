@@ -10,15 +10,37 @@ public class MovePlayer : MonoBehaviour {
     private Vector3 mousePos;
     private float PlayerSpeed = 10f;
 
+    Sprite WhitePlayer, BlackPlayer;
     public class Player
     {
-        ProgressPlayerChecker ProgressPlayerCheck;
-        public Player(){}
-        public bool GetIsContact()
-        {
-            return ProgressPlayerCheck.IsContact;
+        private GameObject Obj;
+        private SpriteRenderer SpriteR;
+        private MoveEnemy.Colors color;
+        public Player(GameObject p_Obj) {
+            Obj = p_Obj;
+            color = MoveEnemy.Colors.White;
+            SpriteR = Obj.GetComponent<SpriteRenderer>();
         }
-        public void InitialIsContact() { ProgressPlayerCheck.IsContact = false; }
+        public void Die() { Obj.SetActive(false); }
+        public MoveEnemy.Colors GetColors() { return color; }
+        public void SetColors(MoveEnemy.Colors p_colors) { color = p_colors; }
+        public void SetImage(Sprite image)
+        {
+            SpriteR.sprite = image;
+        }
+    }
+
+    public void ChangeColor()
+    {
+        if (player.GetColors() == MoveEnemy.Colors.White)
+        {
+            player.SetColors(MoveEnemy.Colors.Black);
+            player.SetImage(BlackPlayer);
+        }
+        else {
+            player.SetColors(MoveEnemy.Colors.White);
+            player.SetImage(WhitePlayer);
+        }
     }
 
     float VerticalLength;
@@ -26,8 +48,15 @@ public class MovePlayer : MonoBehaviour {
     public Player player;
     private void Start()
     {
-        player = new Player();
+        player = new Player(this.gameObject);
         thisBody = this.GetComponent<Rigidbody2D>();
+
+        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
+
+        WhitePlayer = Characters[0];
+        BlackPlayer = Characters[1];
+
+
 
         Vector2 TopLeft = Camera.main.ViewportToWorldPoint(new Vector2(0, 1));
         Vector2 BottomRight = Camera.main.ViewportToWorldPoint(new Vector2(1, 0));
@@ -70,8 +99,6 @@ public class MovePlayer : MonoBehaviour {
             diff.x /= HorizontallLength;
             diff.y /= VerticalLength;
 
-
-            
             thisBody.velocity = diff * PlayerSpeed;
             /*
             if (0 < dist && dist < 7)
