@@ -96,32 +96,36 @@ public class MoveEnemy : MonoBehaviour {
             //Adjust the distance between arrows
             for (int i = 0; i < EnemyNumber; i++)
             {
-                if (Enemys[i].Obj != null)
+                if (Enemys[i].GetObj() != null)
                 {
-                    if (SpawnContactMargin > Vector3.Distance(Enemys[i].Obj.transform.position, SpawnPosition))
+                    if (SpawnContactMargin > Vector3.Distance(Enemys[i].GetObj().transform.position, SpawnPosition))
                         IsRespawn = true;
                 }
             }
         }
-        if (enemy.Obj == null)
+        if (enemy.GetObj() == null)
         {
-            enemy.Obj = Instantiate(PrefabEnemy, SpawnPosition, Quaternion.Euler(0.0f, 0.0f, angle)) as GameObject;
-            enemy.SpriteR = enemy.Obj.GetComponent<SpriteRenderer>();
+            enemy.SetObj(Instantiate(PrefabEnemy, SpawnPosition, Quaternion.Euler(0.0f, 0.0f, angle)) as GameObject);
+
         }
         else
         {
-            enemy.Obj.transform.position = new Vector3(SpawnPosition.x, SpawnPosition.y, 0);
-            enemy.Obj.transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
+            enemy.GetObj().transform.position = new Vector3(SpawnPosition.x, SpawnPosition.y, 0);
+            enemy.GetObj().transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
         }
         //Color Setting
         enemy.color = ColorSet();
         if (enemy.color == Color.White)
-            enemy.SpriteR.sprite = WhiteEnemy;
+            enemy.SetImage(WhiteEnemy);
         else
-            enemy.SpriteR.sprite = BlackEnemy;
+            enemy.SetImage(BlackEnemy);
     }
     void Start() {
-        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
+        ////Dummy
+        dummyPlayer = new Player();
+       ////Dummy
+
+       Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
    
         WhiteEnemy = Characters[1];
         BlackEnemy = Characters[2];
@@ -172,8 +176,8 @@ public class MoveEnemy : MonoBehaviour {
         {
             if (Enemys[i].IsRunning)
             {
-                Enemys[i].Obj.transform.position = Enemys[i].Obj.transform.position + Enemys[i].Direction * EnemySpeed;
-                ep = Enemys[i].Obj.transform.position;
+                Enemys[i].GetObj().transform.position = Enemys[i].GetObj().transform.position + Enemys[i].Direction * EnemySpeed;
+                ep = Enemys[i].GetObj().transform.position;
                 if ((Enemys[i].Direction.x > 0 && ep.x > RightStartPoint.x + ScreenMargin) ||
                     (Enemys[i].Direction.x < 0 && ep.x < LeftStartPoint.x - ScreenMargin) ||
                     (Enemys[i].Direction.y > 0 && ep.y > TopStartPoint.y + ScreenMargin) ||
@@ -182,8 +186,7 @@ public class MoveEnemy : MonoBehaviour {
                 {
                     Enemys[i].IsRunning = false;
                     SpwanEnemy(Enemys[i]);
-                }
-                
+                }                
             }
         }
 
@@ -199,15 +202,77 @@ public class MoveEnemy : MonoBehaviour {
             }
         }
     }
-    enum Color { White,Black };
 
+    void Update()
+    {
+
+        for (int i = 0; i < EnemyNumber; i++)
+        {
+            if (Enemys[i].IsRunning)
+            {
+                switch (Enemys[i].IsContact(dummyPlayer))
+                {
+                    case PlayerCollisionState.Break:
+                        GameEnd = true;
+                        Time.timeScale = 0f;
+                        break;
+                    case PlayerCollisionState.Absorption:
+                        Enemys[i].IsRunning = false;
+                        SpwanEnemy(Enemys[i]);
+                        //Effect
+                        Score++;
+                        Debug.Log(Score);
+                        break;
+                    case PlayerCollisionState.none:
+                        break;
+                }
+            }
+        }
+    }
+    public bool GameEnd = false;
+    public int Score = 0;
+
+    public Player dummyPlayer;
+    public class Player
+    {
+        public Color color;
+        public Player() { color = Color.White; }
+    }
+
+    public enum Color { White,Black };
+
+    enum PlayerCollisionState { none, Break, Absorption }
     class Enemy {
-        public GameObject Obj;
+        private GameObject Obj;
         public Vector3 Direction;
         public bool IsRunning;
         public Color color;
-        public SpriteRenderer SpriteR;
-        public Enemy(){
+        private SpriteRenderer SpriteR;
+        private CollisionChecker CollisionCheck;
+        public Enemy(){ }
+        public void SetObj(GameObject p_Obj)
+        {
+            Obj = p_Obj;
+            CollisionCheck = Obj.GetComponent<CollisionChecker>();
+            SpriteR = Obj.GetComponent<SpriteRenderer>();
+        }
+        public GameObject GetObj() { return Obj; }
+        public void SetImage(Sprite image)
+        {
+            SpriteR.sprite = image;
+        }
+        public PlayerCollisionState IsContact(Player p_Player)
+        {
+            if (CollisionCheck.IsContact)
+            {
+                CollisionCheck.IsContact = false;
+                if (p_Player.color == this.color)
+                {
+                    return PlayerCollisionState.Absorption;
+                }
+                else {return PlayerCollisionState.Break; }
+            }
+            return PlayerCollisionState.none;
         }
     }
 }
