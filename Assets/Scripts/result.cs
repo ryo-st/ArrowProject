@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 // リザルトのパネルの処理
 
 public class result : MonoBehaviour {
 
-    GameObject Panel;
-    GameObject Restart;
+    Image Restart;
+
+    RectTransform Panel;
 
     private bool FlashFlag = true;
     private float alfa;
@@ -17,51 +18,51 @@ public class result : MonoBehaviour {
 
     private float count = 20;
     private bool PanelFlag = false;
-    private float PosX, PosY, PosZ;
-    private float Value;
-
+    private float PosX, PosY;
+    private float TargetPosY;
 	// Use this for initialization
 	void Start () {
-        Panel = GameObject.Find("Panel");
-        Restart = GameObject.Find("ReStart");
+        Restart = GameObject.Find("ReStart").GetComponent<Image>();
+        Panel = GameObject.Find("Panel").GetComponent<RectTransform>();
 
-        PosX = Panel.transform.position.x;
-        PosY = Panel.transform.position.y;
-        PosZ = Panel.transform.position.z;
-        
+        PosX = Panel.anchoredPosition.x;
+        PosY = Panel.anchoredPosition.y;
+        TargetPosY = (Panel.anchoredPosition.y - Panel.sizeDelta.y) * 1.5f;
+        TargetPosY = -375;//CenterPosition,MagicNumber
+        //Panel.anchoredPosition = new Vector2(Panel.anchoredPosition.x ,(Panel.anchoredPosition.y- Panel.sizeDelta.y)*1.5f);
     }
-	
-	// Update is called once per frame
+
+    float ResultAnimationWaitTime = 0;
 	void Update () {
-        Flash();
-
-        if (Input.GetKey(KeyCode.I))
+        //for Debug
+        //if (Input.GetKey(KeyCode.I))
+        //{
+        //    Result();
+        //}
+        // ゲームに戻る処理
+        if (MoveEnemy.GameEnd)
         {
-            PanelFlag = true;
-        }
-        if(PanelFlag == true)
-        { 
-
-            // リザルトパネルが下に降りる処理
-            
-            if (PanelFlag == true)
+            ResultAnimationWaitTime += Time.deltaTime;
+            if (ResultAnimationWaitTime > 2 && Input.GetMouseButton(0))
             {
-                PosY = PosY - count;
-                Panel.transform.position = new Vector3(PosX, PosY, PosZ);
-                Debug.Log(PosY);
-                if (PosY < 100)
-                {
-                    PanelFlag = false;
-                }
+                SceneManager.LoadScene("Main");
             }
         }
-        // ゲームに戻る処理
-        if (Input.GetMouseButton(0))
+    }
+ 
+    void FixedUpdate()
+    {
+        Flash();
+        if (PanelFlag == true)
         {
-            EditorSceneManager.LoadScene("Main2");
+            PosY = PosY - count;
+            Panel.anchoredPosition = new Vector2(PosX , PosY);
+            if (PosY < TargetPosY)
+            {
+                PanelFlag = false;
+            }
         }
     }
-
     // ReStartの点滅処理
     private void Flash()
     {
@@ -73,12 +74,11 @@ public class result : MonoBehaviour {
         {
             alfa -= speed;
         }
-
         if (alfa > 2 || alfa < -1)
         {
             FlashFlag = !FlashFlag;
         }
-        Restart.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, alfa);
+        Restart.color = new Color(1, 1, 1, alfa);
     }
 
     // リザルト画面が呼び出される
@@ -86,15 +86,5 @@ public class result : MonoBehaviour {
     {
         // リザルトパネルが下に降りる処理
         PanelFlag = true;
-        if (PanelFlag == true)
-        {
-            PosY = PosY - count;
-            Panel.transform.position = new Vector3(PosX, PosY, PosZ);
-            Debug.Log(PosY);
-            if (PosY < 100)
-            {
-                PanelFlag = false;
-            }
-        }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
+//using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class title : MonoBehaviour {
 
@@ -35,7 +36,7 @@ public class title : MonoBehaviour {
             d2.FadeIn();
             if (count > 5f)
             {
-                EditorSceneManager.LoadScene("Main2");
+                SceneManager.LoadScene("Main");
                 CountFalg = false;
             }
         }
