@@ -8,18 +8,44 @@ public class MovePlayer : MonoBehaviour {
 
     private Vector3 playerPos;
     private Vector3 mousePos;
+    [SerializeField]
+    private float PlayerSpeed = 0.5f;
 
-    void Update()
+    public class Player
     {
-        PlayerControl();
+        ProgressPlayerChecker ProgressPlayerCheck;
+        public Player(){}
+        public bool GetIsContact()
+        {
+            return ProgressPlayerCheck.IsContact;
+        }
+        public void InitialIsContact() { ProgressPlayerCheck.IsContact = false; }
     }
-    private void PlayerControl()
+
+
+    public Player player;
+    private void Start()
+    {
+        player = new Player();
+        thisBody = this.GetComponent<Rigidbody2D>();
+    }
+    void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             playerPos = this.transform.position;
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
+    }
+    Rigidbody2D thisBody;
+    private void FixedUpdate()
+    {
+        PlayerControl();
+
+    }
+    private void PlayerControl()
+    {
+
         if (Input.GetMouseButton(0))
         {
             Vector3 NowPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - mousePos;
@@ -31,11 +57,9 @@ public class MovePlayer : MonoBehaviour {
             }
 
             playerPos.z = mousePos.z = NowPos.z = 0.0f;
-            Vector3 diff = NowPos - mousePos;
+            Vector3 diff = NowPos - mousePos;      
 
-            this.transform.position += diff * 0.01f;
-            playerPos = transform.position;
-
+            thisBody.velocity = diff * PlayerSpeed;
             /*
             if (0 < dist && dist < 7)
             {
@@ -64,8 +88,15 @@ public class MovePlayer : MonoBehaviour {
         {
             playerPos = Vector3.zero;
             mousePos = Vector3.zero;
+            thisBody.velocity = Vector2.zero;
         }
     }
+    //bool PlayerIsContactWall=false;
+    //void OnCollisionStay2D(Collider2D other)
+    //{
+    //    Debug.Log("ss");
+    //    if (other.tag == "Wall") PlayerIsContactWall = true;
+    //}
 
     /* if (Input.GetMouseButtonDown(0))
         {
