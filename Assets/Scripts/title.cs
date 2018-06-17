@@ -7,6 +7,7 @@ public class title : MonoBehaviour {
 
     GameObject Touch;
     GameObject Fadefnc;
+
     private bool FlashFlag = true;
     private bool CountFalg = false;
     private float alfa;

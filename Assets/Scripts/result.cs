@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor.SceneManagement;
 
 // リザルトのパネルの処理
 
@@ -14,7 +15,7 @@ public class result : MonoBehaviour {
     private float alfa;
     private float speed = 0.035f;
 
-    private float count = 30;
+    private float count = 1;
     private bool PanelFlag = false;
     private float PosX, PosY, PosZ;
 
@@ -32,22 +33,14 @@ public class result : MonoBehaviour {
 	void Update () {
         Flash();
 
-       // D押したらパネルが下に降りる
-        if (Input.GetKey(KeyCode.D))
+        // ゲームに戻る処理
+        if (Input.GetMouseButton(0))
         {
-            PanelFlag = true;
-        }
-        // リザルトパネルが下に降りる処理
-        if (PanelFlag == true)
-        {
-            Panel.transform.position = new Vector3(PosX, PosY - count, PosZ);
-            PosY = PosY - count;
-            if (PosY < 140)
-            {
-                PanelFlag = false;
-            }
+            EditorSceneManager.LoadScene("Main2");
         }
     }
+
+    // ReStartの点滅処理
     private void Flash()
     {
         if (FlashFlag == true)
@@ -64,5 +57,21 @@ public class result : MonoBehaviour {
             FlashFlag = !FlashFlag;
         }
         Restart.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, alfa);
+    }
+
+    // リザルト画面が呼び出される
+    public void Result()
+    {
+        // リザルトパネルが下に降りる処理
+        PanelFlag = true;
+        if (PanelFlag == true)
+        {
+            Panel.transform.position = new Vector3(PosX, PosY - count, PosZ);
+            PosY = PosY - count;
+            if (PosY < 1)
+            {
+                PanelFlag = false;
+            }
+        }
     }
 }
