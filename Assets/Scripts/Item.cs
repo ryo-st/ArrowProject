@@ -33,6 +33,8 @@ public class Item : MonoBehaviour {
     }
     public bool IsSetting = false;
     public bool IsContact = false;
+
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")

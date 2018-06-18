@@ -41,7 +41,9 @@ public class ItemManager : MonoBehaviour {
                     TransItem.transform.position = new Vector3(SpawnPosition.x, SpawnPosition.y, 0);
                     TransItem.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                 //}
-                TransItemS.ItemInitialize();
+                Debug.Log("distance"+Vector3.Distance(TransItem.transform.position,MovePlayerS.player.Obj.transform.position));
+                if((Vector3.Distance(TransItem.transform.position, MovePlayerS.player.Obj.transform.position))>2f)
+                    TransItemS.ItemInitialize();
             }
         }
     }
