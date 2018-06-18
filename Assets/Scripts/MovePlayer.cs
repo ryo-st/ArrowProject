@@ -13,7 +13,7 @@ public class MovePlayer : MonoBehaviour {
     Sprite WhitePlayer, BlackPlayer;
     public class Player
     {
-        private GameObject Obj;
+        public GameObject Obj;
         private SpriteRenderer SpriteR;
         private MoveEnemy.Colors color;
         public Player(GameObject p_Obj) {

@@ -129,8 +129,21 @@ public class MoveEnemy : MonoBehaviour {
         else IsVibration = false;
 
     }
-    
 
+    private IEnumerator StartWait()
+    {
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < EnemyNumber; i++)
+        {
+            SpwanEnemy(Enemys[i]);
+        }
+
+        for (int i = 0; i < InitialRunnningNumber; i++)
+        {
+            Enemys[i].IsRunning = true;
+        }
+        GameStart = true;
+    }
     void Start() {
         PrefabAbsorptionEffect = Resources.Load<GameObject>("ef1");
         Sprite[] Characters = Resources.LoadAll<Sprite>("chr_000");
@@ -165,84 +178,83 @@ public class MoveEnemy : MonoBehaviour {
         {
             Enemys[i] = new Enemy();
         }
-        for (int i = 0; i < EnemyNumber; i++)
-        {
-            SpwanEnemy(Enemys[i]);
-        }
-        for (int i = 0; i < InitialRunnningNumber; i++)
-        {
-            Enemys[i].IsRunning = true;
-        }
+        StartCoroutine("StartWait");
+        
     }
     int InitialRunnningNumber=3;
     float EnemySpeed=0.1f;
     int SpwanRatio = 30;
     void FixedUpdate() {
-        int RunningEnemyNumber = 0;
-        Vector3 ep;//EnemyPosition
-        for (int i = 0; i < EnemyNumber; i++)
+        if (GameStart)
         {
-            if (Enemys[i].IsRunning)
-            {
-                Enemys[i].GetObj().transform.position = Enemys[i].GetObj().transform.position + Enemys[i].Direction * EnemySpeed;
-                ep = Enemys[i].GetObj().transform.position;
-                if ((Enemys[i].Direction.x > 0 && ep.x > RightStartPoint.x + ScreenMargin) ||
-                    (Enemys[i].Direction.x < 0 && ep.x < LeftStartPoint.x - ScreenMargin) ||
-                    (Enemys[i].Direction.y > 0 && ep.y > TopStartPoint.y + ScreenMargin) ||
-                    (Enemys[i].Direction.y < 0 && ep.y < BottomStartPoint.y - ScreenMargin)
-                    )
-                {
-                    Enemys[i].IsRunning = false;
-                    SpwanEnemy(Enemys[i]);
-                }                
-            }
-        }
-
-        for (int i = 0; i < EnemyNumber; i++)
-        {
-            if (Enemys[i].IsRunning) RunningEnemyNumber++;
-        }
-        if (!GameEnd && RunningEnemyNumber < SimultaneousEnemyNumber && Random.Range(0,100) < SpwanRatio)
-        {
+            int RunningEnemyNumber = 0;
+            Vector3 ep;//EnemyPosition
             for (int i = 0; i < EnemyNumber; i++)
             {
-                if (!Enemys[i].IsRunning) { Enemys[i].IsRunning = true;break; }
+                if (Enemys[i].IsRunning)
+                {
+                    Enemys[i].GetObj().transform.position = Enemys[i].GetObj().transform.position + Enemys[i].Direction * EnemySpeed;
+                    ep = Enemys[i].GetObj().transform.position;
+                    if ((Enemys[i].Direction.x > 0 && ep.x > RightStartPoint.x + ScreenMargin) ||
+                        (Enemys[i].Direction.x < 0 && ep.x < LeftStartPoint.x - ScreenMargin) ||
+                        (Enemys[i].Direction.y > 0 && ep.y > TopStartPoint.y + ScreenMargin) ||
+                        (Enemys[i].Direction.y < 0 && ep.y < BottomStartPoint.y - ScreenMargin)
+                        )
+                    {
+                        Enemys[i].IsRunning = false;
+                        SpwanEnemy(Enemys[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < EnemyNumber; i++)
+            {
+                if (Enemys[i].IsRunning) RunningEnemyNumber++;
+            }
+            if (!GameEnd && RunningEnemyNumber < SimultaneousEnemyNumber && Random.Range(0, 100) < SpwanRatio)
+            {
+                for (int i = 0; i < EnemyNumber; i++)
+                {
+                    if (!Enemys[i].IsRunning) { Enemys[i].IsRunning = true; break; }
+                }
             }
         }
-
     }
-
+    bool GameStart = false;
+    public SoundEffectManager SEM;
     public result resultS;
     public score scoreS;
     void Update()
     {
-
-        for (int i = 0; i < EnemyNumber; i++)
+        if (GameStart)
         {
-            if (Enemys[i].IsRunning)
+            for (int i = 0; i < EnemyNumber; i++)
             {
-                switch (Enemys[i].IsContact(MovePlayerS.player))
+                if (Enemys[i].IsRunning)
                 {
-                    case PlayerCollisionState.Break:
-                        GameEnd = true;
-                        if (IsVibration) Handheld.Vibrate();
-                        //Time.timeScale = 0f;
-                        scoreS.SetFinalScore(Score);
-                        MovePlayerS.player.Die();
-                        resultS.Result();
-                        break;
-                    case PlayerCollisionState.Absorption:
-                        //Effect
-                        Instantiate(PrefabAbsorptionEffect, Enemys[i].GetObj().transform.position, Quaternion.identity);
+                    switch (Enemys[i].IsContact(MovePlayerS.player))
+                    {
+                        case PlayerCollisionState.Break:
+                            GameEnd = true;
+                            if (IsVibration) Handheld.Vibrate();
+                            SEM.PlayBreak();
+                            scoreS.SetFinalScore(Score);
+                            MovePlayerS.player.Die();
+                            resultS.Result();
+                            break;
+                        case PlayerCollisionState.Absorption:
+                            //Effect
+                            Instantiate(PrefabAbsorptionEffect, Enemys[i].GetObj().transform.position, Quaternion.identity);
+                            SEM.PlayAbsorption();
+                            Enemys[i].IsRunning = false;
+                            SpwanEnemy(Enemys[i]);
 
-                        Enemys[i].IsRunning = false;
-                        SpwanEnemy(Enemys[i]);
-
-                        Score++;
-                        scoreS.SetScore(Score);
-                        break;
-                    case PlayerCollisionState.none:
-                        break;
+                            Score++;
+                            scoreS.SetScore(Score);
+                            break;
+                        case PlayerCollisionState.none:
+                            break;
+                    }
                 }
             }
         }

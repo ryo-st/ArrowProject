@@ -81,9 +81,11 @@ public class result : MonoBehaviour {
         Restart.color = new Color(1, 1, 1, alfa);
     }
 
+    public AudioSource ResultSource;
     // リザルト画面が呼び出される
     public void Result()
     {
+        //ResultSource.Play();
         // リザルトパネルが下に降りる処理
         PanelFlag = true;
     }
