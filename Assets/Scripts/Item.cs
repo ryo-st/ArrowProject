@@ -18,14 +18,12 @@ public class Item : MonoBehaviour {
         while (true)
         {
             yield return new WaitForSeconds(2f);
-            Debug.Log(Mathf.DeltaAngle(transform.eulerAngles.z, 180));
             while (Mathf.DeltaAngle(transform.eulerAngles.z, 180) > 1f)
             {
                 transform.Rotate(new Vector3(0f, 0f, rotateSpeed));
                 yield return null;
             }
             yield return new WaitForSeconds(2f);
-            Debug.Log(Mathf.DeltaAngle(transform.eulerAngles.z, 360));
             while (Mathf.DeltaAngle(transform.eulerAngles.z, 360) > 1f)
             {
                 transform.Rotate(new Vector3(0f, 0f, rotateSpeed));

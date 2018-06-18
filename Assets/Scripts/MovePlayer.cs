@@ -8,7 +8,7 @@ public class MovePlayer : MonoBehaviour {
 
     private Vector3 playerPos;
     private Vector3 mousePos;
-    private float PlayerSpeed = 10f;
+    private float PlayerSpeed = 15f;
 
     Sprite WhitePlayer, BlackPlayer;
     public class Player

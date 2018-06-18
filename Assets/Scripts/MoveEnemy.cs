@@ -120,9 +120,12 @@ public class MoveEnemy : MonoBehaviour {
         else
             enemy.SetImage(BlackEnemy);
     }
+    private bool IsVibration;
     private void Awake()
     {
         GameEnd = false;
+        if (SystemInfo.supportsVibration) IsVibration = true;
+        else IsVibration = false;
     }
     void Start() {
 
@@ -216,7 +219,9 @@ public class MoveEnemy : MonoBehaviour {
                 {
                     case PlayerCollisionState.Break:
                         GameEnd = true;
+                        if (IsVibration) Handheld.Vibrate();
                         //Time.timeScale = 0f;
+                        scoreS.SetFinalScore(Score);
                         MovePlayerS.player.Die();
                         resultS.Result();
                         break;
