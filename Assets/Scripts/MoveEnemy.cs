@@ -133,7 +133,7 @@ public class MoveEnemy : MonoBehaviour {
 
     void Start() {
         PrefabAbsorptionEffect = Resources.Load<GameObject>("ef1");
-        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
+        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_000");
    
         WhiteEnemy = Characters[2];
         BlackEnemy = Characters[3];

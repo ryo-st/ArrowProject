@@ -51,12 +51,10 @@ public class MovePlayer : MonoBehaviour {
         player = new Player(this.gameObject);
         thisBody = this.GetComponent<Rigidbody2D>();
 
-        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
+        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_000");
 
         WhitePlayer = Characters[0];
         BlackPlayer = Characters[1];
-
-
 
         Vector2 TopLeft = Camera.main.ViewportToWorldPoint(new Vector2(0, 1));
         Vector2 BottomRight = Camera.main.ViewportToWorldPoint(new Vector2(1, 0));

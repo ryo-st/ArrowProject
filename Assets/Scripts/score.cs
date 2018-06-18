@@ -40,7 +40,7 @@ public class score : MonoBehaviour {
             ThirdHighScoreText.text = ThirdHighScore.ToString();
             SecondHighScoreText.text = SecondHighScore.ToString();
             FirstHighScoreText.text = FirstHighScore.ToString();
-            //FirstHighScoreText.text = "★" + FirstHighScore.ToString();
+            FirstHighScoreText.transform.GetChild(0).GetComponent<Image>().enabled = true;
 
         }
         else if(SecondHighScore <= ScoreCount)
@@ -52,7 +52,7 @@ public class score : MonoBehaviour {
             PlayerPrefs.Save();
             ThirdHighScoreText.text = ThirdHighScore.ToString();
             SecondHighScoreText.text = SecondHighScore.ToString();
-            //SecondHighScoreText.text = "★" + SecondHighScore.ToString();
+            SecondHighScoreText.transform.GetChild(0).GetComponent<Image>().enabled = true;
         }
         else if(ThirdHighScore <= ScoreCount)
         {
@@ -60,7 +60,7 @@ public class score : MonoBehaviour {
             PlayerPrefs.SetInt(THIRD_HIGH_SCORE_KEY, ThirdHighScore);
             PlayerPrefs.Save();
             ThirdHighScoreText.text = ThirdHighScore.ToString();
-            //ThirdHighScoreText.text = "★" + ThirdHighScore.ToString();
+            ThirdHighScoreText.transform.GetChild(0).GetComponent<Image>().enabled = true;
 
         }
 
