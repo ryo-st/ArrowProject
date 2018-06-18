@@ -11,6 +11,7 @@ public class MoveEnemy : MonoBehaviour {
     public GameObject PrefabEnemy;
     Sprite WhiteEnemy, BlackEnemy;
 
+    GameObject PrefabAbsorptionEffect;
     Vector2 LeftStartPoint, BottomStartPoint;
     Vector2 LeftEndPoint, BottomEndPoint;
 
@@ -126,10 +127,13 @@ public class MoveEnemy : MonoBehaviour {
         GameEnd = false;
         if (SystemInfo.supportsVibration) IsVibration = true;
         else IsVibration = false;
-    }
-    void Start() {
 
-       Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
+    }
+    
+
+    void Start() {
+        PrefabAbsorptionEffect = Resources.Load<GameObject>("ef1");
+        Sprite[] Characters = Resources.LoadAll<Sprite>("chr_256");
    
         WhiteEnemy = Characters[2];
         BlackEnemy = Characters[3];
@@ -205,7 +209,9 @@ public class MoveEnemy : MonoBehaviour {
                 if (!Enemys[i].IsRunning) { Enemys[i].IsRunning = true;break; }
             }
         }
+
     }
+
     public result resultS;
     public score scoreS;
     void Update()
@@ -226,9 +232,12 @@ public class MoveEnemy : MonoBehaviour {
                         resultS.Result();
                         break;
                     case PlayerCollisionState.Absorption:
+                        //Effect
+                        Instantiate(PrefabAbsorptionEffect, Enemys[i].GetObj().transform.position, Quaternion.identity);
+
                         Enemys[i].IsRunning = false;
                         SpwanEnemy(Enemys[i]);
-                        //Effect
+
                         Score++;
                         scoreS.SetScore(Score);
                         break;

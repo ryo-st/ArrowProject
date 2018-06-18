@@ -72,8 +72,6 @@ public class score : MonoBehaviour {
         SecondHighScore = PlayerPrefs.GetInt(SECOND_HIGH_SCORE_KEY, 0);
         ThirdHighScore = PlayerPrefs.GetInt(THIRD_HIGH_SCORE_KEY, 0);
 
-        Debug.Log(FirstHighScore);
-
         NowScore = this.GetComponent<Text>();
         NowScore.text = ScoreCount.ToString();
 ;
